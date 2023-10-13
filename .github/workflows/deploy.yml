@@ -25,13 +25,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Deployment job
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # Deployment job
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+    - uses: actions/setup-node@v3
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.4.0
+      with:
+          branch: main
+          folder: out
