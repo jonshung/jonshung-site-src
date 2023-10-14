@@ -74,15 +74,15 @@ export default function homePage() {
 
 function LinkButton({ label, href, buttonColor }) {
     const colorVariant = {
-        blue: "text-blue-900 hover:bg-blue-400",
-        green: "bg-green-300 text-green-900 hover:bg-green-400",
-        gray: "text-gray-900 hover:bg-gray-400",
+        blue: "text-blue-600 hover:bg-blue-400",
+        green: "text-green-600 hover:bg-green-400",
+        gray: "text-gray-600 hover:bg-gray-400",
     }
   return (
     <div className="mt-6">
       <Link
         className={
-            `shadow-lg inline-flex justify-center rounded-md border border-transparent px-20 py-10 text-lg font-bold focus:outline-none focus-visible:ring-2 
+            `transition shadow-lg inline-flex justify-center rounded-full border border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
             focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`
         }
         href={href}
