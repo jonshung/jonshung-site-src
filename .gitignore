@@ -3,3 +3,6 @@ node_modules/
 .vscode/
 tsconfig.json
 next-env.d.ts
+# Local Netlify folder
+.netlify
+netlify.toml

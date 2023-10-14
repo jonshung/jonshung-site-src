@@ -20,7 +20,7 @@ export default function homePage() {
       </Head>
       <div className={utilStyles.containerHolder}>
         <div className={utilStyles.container}>
-          <div className="relative flex h-32 w-full justify-center rounded-xl bg-cover">
+          <div className="relative flex h-40 w-full justify-center rounded-xl bg-cover">
             <Image
               className="absolute flex justify-center rounded-xl object-cover"
               src="/media/images/school-bg.jpg"
@@ -28,7 +28,7 @@ export default function homePage() {
               fill
               alt="HCMUS"
             />
-            <div className="absolute -bottom-12 flex h-[87px] w-[87px] items-center justify-center rounded-full border-[4px] border-white bg-black overflow-hidden">
+            <div className="absolute -bottom-12 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[4px] border-white bg-black overflow-hidden">
               <Image
                 className="h-full w-full object-cover"
                 src="/media/images/profile_picture.jpg"
@@ -74,15 +74,16 @@ export default function homePage() {
 
 function LinkButton({ label, href, buttonColor }) {
     const colorVariant = {
-        blue: "bg-blue-300 text-blue-900 hover:bg-blue-400",
+        blue: "text-blue-900 hover:bg-blue-400",
         green: "bg-green-300 text-green-900 hover:bg-green-400",
-        gray: "bg-gray-300 text-gray-900 hover:bg-gray-400",
+        gray: "text-gray-900 hover:bg-gray-400",
     }
   return (
-    <div className="mt-4">
+    <div className="mt-6">
       <Link
         className={
-            `inline-flex justify-center rounded-md border border-transparent px-32 py-2 text-sm font-mediu focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`
+            `shadow-lg inline-flex justify-center rounded-md border border-transparent px-20 py-10 text-lg font-bold focus:outline-none focus-visible:ring-2 
+            focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`
         }
         href={href}
       >
