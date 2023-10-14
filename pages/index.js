@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Head from "next/head";
@@ -28,7 +27,7 @@ export default function homePage() {
               fill
               alt="HCMUS"
             />
-            <div className="absolute -bottom-12 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[4px] border-white bg-black overflow-hidden">
+            <div className="absolute -bottom-12 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[10px] border-white/0 backdrop-blur-md bg-white/0 overflow-hidden">
               <Image
                 className="h-full w-full object-cover"
                 src="/media/images/profile_picture.jpg"
@@ -39,7 +38,7 @@ export default function homePage() {
             </div>
           </div>
           <div className="mt-14 flex flex-col items-center">
-            <h4 className="text-xl font-bold text-blue-950">Jons Hung</h4>
+            <h4 className="text-xl font-bold text-white">Jons Hung</h4>
           </div>
           <LinkButton
             label="Github"
@@ -67,7 +66,6 @@ export default function homePage() {
                     }
                 })}
             </ul>*/}
-      <div></div>
     </Layout>
   );
 }
@@ -82,7 +80,7 @@ function LinkButton({ label, href, buttonColor }) {
     <div className="mt-6">
       <Link
         className={
-            `transition shadow-lg inline-flex justify-center rounded-full border border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
+            `max-w-[200px] transition shadow-lg inline-flex justify-center border-[0.2px] border-white border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
             focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`
         }
         href={href}
