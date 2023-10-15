@@ -1,5 +1,6 @@
-import React from "react";
-import dynamic from "next/dynamic";
+import React, { useState, useEffect, useRef } from "react";
+import ForceGraph2D from "react-force-graph-2d";
+import * as d3 from "d3";
 
 class Queue {
   constructor() {
@@ -29,21 +30,20 @@ class Queue {
   }
 }
 
-const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
-  ssr: false,
-});
-
 function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
 export default function GraphComponent({}) {
+  let displayHeight = window.innerHeight;
+  let displayWidth = window.innerWidth;
+  let marginSize = 2;
+
   let nodes = [];
-  for (let i = 0; i <= getRndInteger(50, 100); i++) {
-    const nodeNamePkg = i;
+  for (let i = 0; i <= getRndInteger(100, 200); i++) {
     nodes.push({
       id: `${i}`,
-      color: 'white'
+      color: "rgba(255,255,255,0.4)"
     });
   }
   let explored = {};
@@ -53,54 +53,138 @@ export default function GraphComponent({}) {
 
   let edges = [];
   let edgeCount = 0;
+  let treeCount = 0;
 
-  function BFS(nodes, start) {
-    explored[start] = true;
+  function BFS(nodes, start, max) {
+    explored[start.id] = true;
 
     let queue = new Queue();
     queue.enqueue(start);
 
+    let connectable = max;
+    let connected = 0;
+
+    let randomMarginWidth = getRndInteger(
+      -(displayWidth / marginSize),
+      displayWidth / marginSize
+    );
+    let randomMarginHeight = getRndInteger(
+      -(displayHeight / marginSize),
+      displayHeight / marginSize
+    );
+    treeCount++;
+
     while (queue.size() > 0) {
       let s = queue.dequeue();
-      let connectable = getRndInteger(1, 3);
-      let connected = 0;
+      if (connected == connectable) break;
 
-      for (let i = 0; i < nodes.length; i++) {
+      let linkMax = getRndInteger(1, 3);
+      let linked = 0;
+
+      for (let i = start.id; i < nodes.length; i++) {
+        if (linked == linkMax || connectable == connected) break;
         let node = nodes[i];
-        if (connected == connectable) break;
+
         if (!explored[node.id]) {
+          node.x = randomMarginWidth;
+          node.y = randomMarginHeight;
+          start.x = randomMarginWidth;
+          start.y = randomMarginHeight;
+
           queue.enqueue(node.id);
           explored[node.id] = true;
           edges.push({
             id: "edge" + edgeCount,
             source: s,
             target: node.id,
-            color: 'white'
+            color: "rgba(255,255,255,0.4)",
           });
           edgeCount++;
           connected++;
+          linked++;
         }
       }
     }
   }
-  BFS(nodes, nodes[0].id);
+
+  for (let k = 0; k < nodes.length; k++) {
+    if (explored[nodes[k].id]) continue;
+    BFS(nodes, nodes[k], getRndInteger(10, 20));
+  }
+
+  nodes.push({
+    id: `sun`,
+    color: "yellow",
+    val: 100,
+    fx: 0,
+    fy: 0,
+  });
 
   let data = {
     nodes: nodes,
     links: edges,
   };
 
-  let displayHeight = window.innerHeight;
-  let displayWidth = window.innerWidth;
+  const FindPoint = (x1, y1, x2, y2, x, y) => {
+    if (x > x1 && x < x2 && y > y1 && y < y2) return true;
+    return false;
+  };
+
+
+  let widthBorder = displayWidth / marginSize;
+  let heightBorder = displayHeight / marginSize;
+  console.log("Range: width: " + widthBorder + " height: " + heightBorder);
+
+  const fgRef = useRef();
 
   return (
-    <div className="absolute top-0 z-0">
-      <ForceGraph2D 
-      width={(displayWidth)} 
-      height={(displayHeight)}
-      enablePanInteraction={false} 
-      enableZoomInteraction={false} 
-      graphData={data}></ForceGraph2D>
+    <div
+      className={
+        "w-[" +
+        displayWidth +
+        "] h-[" +
+        displayHeight +
+        "] border-white border-10 absolute top-0 z-0"
+      }
+    >
+      <ForceGraph2D
+        ref={fgRef}
+        width={displayWidth}
+        height={displayHeight}
+        enableZoomInteraction={false}
+        enablePanInteraction={false}
+        graphData={data}
+        cooldownTime={4000}
+        onEngineTick={() => {
+          let graph = fgRef.current;
+          graph.centerAt(0, 0, 0);
+          graph.zoom(1); 
+          let sim = graph.d3Force;
+          if (sim == undefined) return;
+          if (sim("collide") == undefined) sim("collide", d3.forceCollide);
+          sim("charge").distanceMax(1000).distanceMin(30).strength(-300);
+          sim("centerx", d3.forceX(0).strength(0.02));
+          sim("centery", d3.forceY(0).strength(0.02));
+        }}
+        onEngineStop={() => {
+          let sim = fgRef.current.d3Force;
+          sim("link").distance(getRndInteger(10, 50));
+        }}
+        onNodeDragEnd={(node, translate) => {
+          console.log("x: " + node.x + " y: " + node.y);
+          if(!FindPoint(-widthBorder, -heightBorder, widthBorder, heightBorder, node.x, node.y)) {
+            node.x = translate.x; node.y = translate.y;
+            console.log("did");
+          } 
+        }}
+        nodeCanvasObject={(node, context, glb) => {
+          const r = Math.sqrt(Math.max(0, node.val || 1)) * 4;
+          context.beginPath();
+          context.arc(node.x, node.y, r, 0, 2 * Math.PI, false);
+          context.fillStyle = node.color;
+          context.fill();
+        }}
+      ></ForceGraph2D>
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default function homePage() {
             href="https://facebook.com/jonshung.g"
             buttonColor="blue"
           />
-        </div>
+        </div> 
       </div>
       {/*<ul>
                 {items.map((itemName) => {
@@ -71,18 +71,16 @@ export default function homePage() {
 }
 
 function LinkButton({ label, href, buttonColor }) {
-    const colorVariant = {
-        blue: "text-blue-600 hover:bg-blue-400",
-        green: "text-green-600 hover:bg-green-400",
-        gray: "text-gray-600 hover:bg-gray-400",
-    }
+  const colorVariant = {
+    blue: "text-blue-600 hover:bg-blue-400 hover:text-blue-900",
+    green: "text-green-700 hover:bg-green-400 hover:text-green-950",
+    gray: "text-gray-600 hover:bg-gray-400 hover:text-gray-900",
+  };
   return (
     <div className="mt-6">
       <Link
-        className={
-            `max-w-[200px] transition shadow-lg inline-flex justify-center border-[0.2px] border-white border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
-            focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`
-        }
+        className={`max-w-[200px] transition backdrop-blur-lg bg-transparent inline-flex justify-center border-[0.2px] border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
+            focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`}
         href={href}
       >
         {label}

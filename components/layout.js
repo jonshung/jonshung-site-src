@@ -1,10 +1,7 @@
-import styles from "./layout.module.css";
 import Head from "next/head";
 import Link from "next/link";
 import bgImg from "./background.module.css";
 import dynamic from "next/dynamic";
-
-import GraphComponent from "./graph";
 
 import { useState, useEffect } from "react";
 
@@ -19,7 +16,9 @@ export default function Layout({ children, home }) {
   useEffect(() => {
     setDidMount(true);
   }, []);
+  let GraphComponent;
   if(didMount) {
+    GraphComponent = dynamic(() => import("./graph"), { ssr: false });
   }
   return (
     <div>
@@ -28,8 +27,8 @@ export default function Layout({ children, home }) {
         <meta name="og:title" content={siteTitle} />
       </Head>
       <main className={bgImg.bgImg}>
-        {children}
         {didMount ? (<GraphComponent />) : (<NoGraph />)}
+        {children}
       </main>
     </div>
   );
