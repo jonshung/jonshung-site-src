@@ -13,9 +13,16 @@ function NoGraph({}) {
 
 export default function Layout({ children, home }) {
   const [ didMount, setDidMount ] = useState(false);
+  const [dimensions, setDimensions] = useState({});
   useEffect(() => {
     setDidMount(true);
+    function onResize() {
+      setDimensions({ height: window.innerHeight, width: window.innerWidth});
+    }
+    onResize();
+    window.addEventListener("resize", onResize);
   }, []);
+  
   let GraphComponent;
   if(didMount) {
     GraphComponent = dynamic(() => import("./graph"), { ssr: false });

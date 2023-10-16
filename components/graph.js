@@ -35,6 +35,7 @@ function getRndInteger(min, max) {
 }
 
 export default function GraphComponent({}) {
+  const forceCount = useRef(0);
   let displayHeight = window.innerHeight;
   let displayWidth = window.innerWidth;
   let marginSize = 2;
@@ -130,10 +131,27 @@ export default function GraphComponent({}) {
     return false;
   };
 
+  const randomPositionForceHandler = (x, y, strength) => {
+    const sim = fgRef.current.d3Force;
+    const graph = fgRef.current;
+    const aliveTime = getRndInteger(3000, 5000); //in ms
+    const forceNameX = "randomCenterForceX" + (forceCount.current + 1);
+    const forceNameY = "randomCenterForceY" + (forceCount.current + 1);
+    sim(forceNameX, d3.forceX(x).strength(strength))
+    sim(forceNameY, d3.forceY(y).strength(strength));
+
+    setTimeout(() => {
+      sim(forceNameX).strength(0);
+    }, aliveTime);
+    setTimeout(() => {
+      sim(forceNameY).strength(0);
+      forceCount.current = 0;
+      graph.d3VelocityDecay = 0.02;
+    }, aliveTime);
+  }
 
   let widthBorder = displayWidth / marginSize;
   let heightBorder = displayHeight / marginSize;
-  console.log("Range: width: " + widthBorder + " height: " + heightBorder);
 
   const fgRef = useRef();
 
@@ -154,28 +172,41 @@ export default function GraphComponent({}) {
         enableZoomInteraction={false}
         enablePanInteraction={false}
         graphData={data}
-        cooldownTime={4000}
+        cooldownTime={6000}
         onEngineTick={() => {
           let graph = fgRef.current;
-          graph.centerAt(0, 0, 0);
-          graph.zoom(1); 
+          graph.zoom(1);
           let sim = graph.d3Force;
+
+          if(getRndInteger(1, 20) == 1 && forceCount.current == 0) {  
+            graph.d3VelocityDecay = 0.1;
+            const randX = getRndInteger(widthBorder, widthBorder*2);
+            const randY = getRndInteger(heightBorder, heightBorder*2);
+            randomPositionForceHandler(randX, randY, getRndInteger(1, 10) / 10000);
+            graph.d3ReheatSimulation();
+            forceCount.current = 1;
+          }
+
           if (sim == undefined) return;
           if (sim("collide") == undefined) sim("collide", d3.forceCollide);
           sim("charge").distanceMax(1000).distanceMin(30).strength(-300);
-          sim("centerx", d3.forceX(0).strength(0.02));
-          sim("centery", d3.forceY(0).strength(0.02));
         }}
         onEngineStop={() => {
           let sim = fgRef.current.d3Force;
           sim("link").distance(getRndInteger(10, 50));
+          sim("centerx", d3.forceX(0).strength(0.015));
+          sim("centery", d3.forceY(0).strength(0.015));
         }}
         onNodeDragEnd={(node, translate) => {
-          console.log("x: " + node.x + " y: " + node.y);
           if(!FindPoint(-widthBorder, -heightBorder, widthBorder, heightBorder, node.x, node.y)) {
             node.x = translate.x; node.y = translate.y;
-            console.log("did");
           } 
+          
+          let graph = fgRef.current;
+          let sim = graph.d3Force;
+          if (sim == undefined) return;
+          sim("centerx", d3.forceX(0).strength(0.015));
+          sim("centery", d3.forceY(0).strength(0.015));
         }}
         nodeCanvasObject={(node, context, glb) => {
           const r = Math.sqrt(Math.max(0, node.val || 1)) * 4;
