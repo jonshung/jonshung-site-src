@@ -12,19 +12,24 @@ function NoGraph({}) {
 }
 
 export default function Layout({ children, home }) {
-  const [ didMount, setDidMount ] = useState(false);
+  const [didMount, setDidMount] = useState(false);
   const [dimensions, setDimensions] = useState({});
+
   useEffect(() => {
     setDidMount(true);
     function onResize() {
-      setDimensions({ height: window.innerHeight, width: window.innerWidth});
+      setDimensions({ height: window.innerHeight, width: window.innerWidth });
     }
-    onResize();
-    window.addEventListener("resize", onResize);
+    if ("maxTouchPoints" in navigator) {
+      if (navigator.maxTouchPoints > 0) {
+        onResize();
+        window.addEventListener("resize", onResize);
+      }
+    }
   }, []);
-  
+
   let GraphComponent;
-  if(didMount) {
+  if (didMount) {
     GraphComponent = dynamic(() => import("./graph"), { ssr: false });
   }
   return (
@@ -34,7 +39,7 @@ export default function Layout({ children, home }) {
         <meta name="og:title" content={siteTitle} />
       </Head>
       <main className={bgImg.bgImg}>
-        {didMount ? (<GraphComponent />) : (<NoGraph />)}
+        {didMount ? <GraphComponent /> : <NoGraph />}
         {children}
       </main>
     </div>
