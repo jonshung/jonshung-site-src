@@ -43,19 +43,19 @@ export default function homePage() {
           <LinkButton
             label="Github"
             href="https://github.com/jonshung"
-            buttonColor="green"
+            buttonId="github"
           />
           <LinkButton
             label="LinkedIn"
             href="https://www.linkedin.com/in/jonshung/"
-            buttonColor="gray"
+            buttonId="linkedin"
           />
           <LinkButton
             label="Facebook"
             href="https://facebook.com/jonshung.g"
-            buttonColor="blue"
+            buttonId="facebook"
           />
-        </div> 
+        </div>
       </div>
       {/*<ul>
                 {items.map((itemName) => {
@@ -70,21 +70,38 @@ export default function homePage() {
   );
 }
 
-function LinkButton({ label, href, buttonColor }) {
+function LinkButton({ label, href, buttonId }) {
   const colorVariant = {
-    blue: "text-blue-600 hover:bg-blue-400 hover:text-blue-900",
-    green: "text-green-700 hover:bg-green-400 hover:text-green-950",
-    gray: "text-gray-600 hover:bg-gray-400 hover:text-gray-900",
+    facebook: "hover:bg-[#5890ff] hover:text-blue-900 hover:shadow-blue-400",
+    github: "hover:bg-[#39d98a] hover:text-green-950 hover:shadow-green-400",
+    linkedin: "hover:bg-[#0077B5] hover:text-gray-900 hover:shadow-[#0077B5]",
+  };
+  const iconVariant = {
+    facebook: "facebook-icon.webp",
+    github: "github-icon.png",
+    linkedin: "linkedin-icon.png",
   };
   return (
-    <div className="mt-6">
-      <Link
-        className={`max-w-[200px] transition backdrop-blur-lg bg-transparent inline-flex justify-center border-[0.2px] border-transparent px-20 py-6 text-lg font-bold focus:outline-none focus-visible:ring-2 
-            focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${colorVariant[buttonColor]}`}
-        href={href}
-      >
+    <Link
+      className={
+            `w-52 h-16 flex group mt-6 place-content-center overflow-clip
+            transition rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white justify-center 
+            border-[0.2px] border-transparent text-lg font-bold focus:outline-none focus-visible:ring-2 
+          focus-visible:ring-blue-500 focus-visible:ring-offset-2 max-w-[200px] ` +
+            colorVariant[buttonId]
+      }
+      href={href}
+    >
+      <Image
+        src={"/media/images/" + iconVariant[buttonId]}
+        className={ "transition duration-300 max-h-10 max-w-10 m-auto -translate-x-44 group-hover:translate-x-0 object-scale-down" }
+        sizes="100vw"
+        fill
+        alt="link icon"
+      />
+      <div className={ "transition duration-300 text-black m-auto group-hover:translate-x-44" }>
         {label}
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 }

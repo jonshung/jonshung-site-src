@@ -39,7 +39,7 @@ export default function Layout({ children, home }) {
         <meta name="og:title" content={siteTitle} />
       </Head>
       <main className={bgImg.bgImg}>
-        {didMount ? <GraphComponent /> : <NoGraph />}
+        {didMount ? <GraphComponent minNodeConnect={1} maxNodeConnect={3}/> : <NoGraph />}
         {children}
       </main>
     </div>

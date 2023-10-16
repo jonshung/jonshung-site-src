@@ -34,17 +34,35 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-export default function GraphComponent({}) {
+export default function GraphComponent({
+  graphMin,
+  graphMax,
+  minTree,
+  maxTree,
+  minNodeConnect,
+  maxNodeConnect,
+}) {
+  console.log("Loading graph config...");
+  var _graphMin = (graphMin == undefined) ? 150 : graphMin,
+      _graphMax = (graphMax == undefined) ? 300 : graphMax,
+      _minTree = (minTree == undefined) ? 10 : minTree,
+      _maxTree = (maxTree == undefined) ? 20 : maxTree,
+      _minNodeConnect = (minNodeConnect == undefined) ? 1 : minNodeConnect,
+      _maxNodeConnect = (maxNodeConnect == undefined) ? 3 : maxNodeConnect;
+
   const forceCount = useRef(0);
   let displayHeight = window.innerHeight;
   let displayWidth = window.innerWidth;
   let marginSize = 2;
 
   let nodes = [];
-  for (let i = 0; i <= getRndInteger(100, 200); i++) {
+  console.log("test " + getRndInteger(_graphMin, _graphMax));
+  for (let i = 0; i <= getRndInteger(_graphMin, _graphMax); i++) {
     nodes.push({
       id: `${i}`,
-      color: "rgba(255,255,255,0.4)"
+      color: "rgb(140,140,140)",
+      degree: 0,
+      val: 1
     });
   }
   let explored = {};
@@ -79,10 +97,10 @@ export default function GraphComponent({}) {
       let s = queue.dequeue();
       if (connected == connectable) break;
 
-      let linkMax = getRndInteger(1, 3);
+      let linkMax = getRndInteger(_minNodeConnect, _maxNodeConnect);
       let linked = 0;
 
-      for (let i = start.id; i < nodes.length; i++) {
+      for (let i = 0; i < nodes.length; i++) {
         if (linked == linkMax || connectable == connected) break;
         let node = nodes[i];
 
@@ -92,13 +110,13 @@ export default function GraphComponent({}) {
           start.x = randomMarginWidth;
           start.y = randomMarginHeight;
 
-          queue.enqueue(node.id);
-          explored[node.id] = true;
+          queue.enqueue(node);
+          explored[node.id] = true; 
           edges.push({
             id: "edge" + edgeCount,
-            source: s,
+            source: s.id,
             target: node.id,
-            color: "rgba(255,255,255,0.4)",
+            color: "rgb(140,140,140)",
           });
           edgeCount++;
           connected++;
@@ -110,16 +128,28 @@ export default function GraphComponent({}) {
 
   for (let k = 0; k < nodes.length; k++) {
     if (explored[nodes[k].id]) continue;
-    BFS(nodes, nodes[k], getRndInteger(10, 20));
+    BFS(nodes, nodes[k], getRndInteger(_minTree, _maxTree));
   }
 
-  nodes.push({
+  edges.forEach((edge) => {
+    let srcNode = nodes[edge.source];
+    let tgNode = nodes[edge.target];
+    srcNode.degree += 1;
+    tgNode.degree += 1;
+    srcNode.val = Math.log2(srcNode.degree);
+    tgNode.val = Math.log2(tgNode.degree);
+  });
+
+  /*let sunData = {
     id: `sun`,
     color: "yellow",
-    val: 100,
-    fx: 0,
-    fy: 0,
-  });
+    val: 50,
+    x: 300,
+    y: -200
+  };
+  sunData.fx = sunData.x;
+  sunData.fy = sunData.y;
+  nodes.push(sunData);*/
 
   let data = {
     nodes: nodes,
@@ -137,7 +167,7 @@ export default function GraphComponent({}) {
     const aliveTime = getRndInteger(3000, 5000); //in ms
     const forceNameX = "randomCenterForceX" + (forceCount.current + 1);
     const forceNameY = "randomCenterForceY" + (forceCount.current + 1);
-    sim(forceNameX, d3.forceX(x).strength(strength))
+    sim(forceNameX, d3.forceX(x).strength(strength));
     sim(forceNameY, d3.forceY(y).strength(strength));
 
     setTimeout(() => {
@@ -148,13 +178,14 @@ export default function GraphComponent({}) {
       forceCount.current = 0;
       graph.d3VelocityDecay = 0.02;
     }, aliveTime);
-  }
+  };
 
   let widthBorder = displayWidth / marginSize;
   let heightBorder = displayHeight / marginSize;
 
   const fgRef = useRef();
 
+  console.log("rendering...");
   return (
     <div
       className={
@@ -171,25 +202,32 @@ export default function GraphComponent({}) {
         height={displayHeight}
         enableZoomInteraction={false}
         enablePanInteraction={false}
-        graphData={data}
+        graphData={data}  
         cooldownTime={6000}
+        linkDirectionalParticleColor={() => 'white'}
+        linkDirectionalParticleSpeed={0.013}
+        linkDirectionalParticles={1}
         onEngineTick={() => {
           let graph = fgRef.current;
           graph.zoom(1);
           let sim = graph.d3Force;
 
-          if(getRndInteger(1, 20) == 1 && forceCount.current == 0) {  
+          if (getRndInteger(1, 20) == 1 && forceCount.current == 0) {
             graph.d3VelocityDecay = 0.1;
-            const randX = getRndInteger(widthBorder, widthBorder*2);
-            const randY = getRndInteger(heightBorder, heightBorder*2);
-            randomPositionForceHandler(randX, randY, getRndInteger(1, 10) / 10000);
+            const randX = getRndInteger(widthBorder, widthBorder * 2);
+            const randY = getRndInteger(heightBorder, heightBorder * 2);
+            randomPositionForceHandler(
+              randX,
+              randY,
+              getRndInteger(1, 10) / 10000
+            );
             graph.d3ReheatSimulation();
             forceCount.current = 1;
           }
 
           if (sim == undefined) return;
           if (sim("collide") == undefined) sim("collide", d3.forceCollide);
-          sim("charge").distanceMax(1000).distanceMin(30).strength(-300);
+          sim("charge").distanceMax(1000).distanceMin(30).strength(-100);
         }}
         onEngineStop={() => {
           let sim = fgRef.current.d3Force;
@@ -197,11 +235,22 @@ export default function GraphComponent({}) {
           sim("centerx", d3.forceX(0).strength(0.015));
           sim("centery", d3.forceY(0).strength(0.015));
         }}
+        
         onNodeDragEnd={(node, translate) => {
-          if(!FindPoint(-widthBorder, -heightBorder, widthBorder, heightBorder, node.x, node.y)) {
-            node.x = translate.x; node.y = translate.y;
-          } 
-          
+          if (
+            !FindPoint(
+              -widthBorder,
+              -heightBorder,
+              widthBorder,
+              heightBorder,
+              node.x,
+              node.y
+            )
+          ) {
+            node.x -= translate.x;
+            node.y -= translate.y;
+          }
+
           let graph = fgRef.current;
           let sim = graph.d3Force;
           if (sim == undefined) return;
