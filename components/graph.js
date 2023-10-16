@@ -42,7 +42,6 @@ export default function GraphComponent({
   minNodeConnect,
   maxNodeConnect,
 }) {
-  console.log("Loading graph config...");
   var _graphMin = (graphMin == undefined) ? 150 : graphMin,
       _graphMax = (graphMax == undefined) ? 300 : graphMax,
       _minTree = (minTree == undefined) ? 10 : minTree,
@@ -56,7 +55,6 @@ export default function GraphComponent({
   let marginSize = 2;
 
   let nodes = [];
-  console.log("test " + getRndInteger(_graphMin, _graphMax));
   for (let i = 0; i <= getRndInteger(_graphMin, _graphMax); i++) {
     nodes.push({
       id: `${i}`,
@@ -184,8 +182,6 @@ export default function GraphComponent({
   let heightBorder = displayHeight / marginSize;
 
   const fgRef = useRef();
-
-  console.log("rendering...");
   return (
     <div
       className={

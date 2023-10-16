@@ -40,21 +40,23 @@ export default function homePage() {
           <div className="mt-14 flex flex-col items-center">
             <h4 className="text-xl font-bold text-white">Jons Hung</h4>
           </div>
-          <LinkButton
-            label="Github"
-            href="https://github.com/jonshung"
-            buttonId="github"
-          />
-          <LinkButton
-            label="LinkedIn"
-            href="https://www.linkedin.com/in/jonshung/"
-            buttonId="linkedin"
-          />
-          <LinkButton
-            label="Facebook"
-            href="https://facebook.com/jonshung.g"
-            buttonId="facebook"
-          />
+          <div className="grid gap-10 mt-4">
+            <LinkButton
+              label="Github"
+              href="https://github.com/jonshung"
+              buttonId="github"
+            />
+            <LinkButton
+              label="LinkedIn"
+              href="https://www.linkedin.com/in/jonshung/"
+              buttonId="linkedin"
+            />
+            <LinkButton
+              label="Facebook"
+              href="https://facebook.com/jonshung.g"
+              buttonId="facebook"
+            />
+          </div>
         </div>
       </div>
       {/*<ul>
@@ -84,22 +86,27 @@ function LinkButton({ label, href, buttonId }) {
   return (
     <Link
       className={
-            `w-52 h-16 flex group mt-6 place-content-center overflow-clip
-            transition rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white justify-center 
+        `w-52 h-16 relative flex group overflow-clip
+            transition rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white/[.9] items-center justify-center 
             border-[0.2px] border-transparent text-lg font-bold focus:outline-none focus-visible:ring-2 
-          focus-visible:ring-blue-500 focus-visible:ring-offset-2 max-w-[200px] ` +
-            colorVariant[buttonId]
+          focus-visible:ring-blue-500 focus-visible:ring-offset-2 max-w-[200px] hover:scale-110 ` +
+        colorVariant[buttonId]
       }
       href={href}
     >
       <Image
         src={"/media/images/" + iconVariant[buttonId]}
-        className={ "transition duration-300 max-h-10 max-w-10 m-auto -translate-x-44 group-hover:translate-x-0 object-scale-down" }
+        className={"transition duration-300 -translate-x-44 absolute group-hover:translate-x-0 object-contain"}
         sizes="100vw"
-        fill
+        width={35}
+        height={35}
         alt="link icon"
       />
-      <div className={ "transition duration-300 text-black m-auto group-hover:translate-x-44" }>
+      <div
+        className={
+          "transition duration-300 text-black group-hover:translate-x-44"
+        }
+      >
         {label}
       </div>
     </Link>
