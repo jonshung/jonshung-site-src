@@ -21,7 +21,7 @@ export default function Layout({ children, home }) {
       setDimensions({ height: window.innerHeight, width: window.innerWidth });
     }
     if ("maxTouchPoints" in navigator) {
-      if (navigator.maxTouchPoints > 0) {
+      if (!(navigator.maxTouchPoints > 0)) {
         onResize();
         window.addEventListener("resize", onResize);
       }
