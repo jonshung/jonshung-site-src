@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+"use client";
+import React, { useEffect, useState, useRef } from "react";
 import ForceGraph2D from "react-force-graph-2d";
 import * as d3 from "d3";
 
@@ -34,6 +35,10 @@ function getRndInteger(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
+function NoGraph({}) {
+  return <h1>Loading...</h1>;
+}
+
 export default function GraphComponent({
   graphMin,
   graphMax,
@@ -42,35 +47,57 @@ export default function GraphComponent({
   minNodeConnect,
   maxNodeConnect,
 }) {
-  var _graphMin = (graphMin == undefined) ? 150 : graphMin,
-      _graphMax = (graphMax == undefined) ? 300 : graphMax,
-      _minTree = (minTree == undefined) ? 10 : minTree,
-      _maxTree = (maxTree == undefined) ? 20 : maxTree,
-      _minNodeConnect = (minNodeConnect == undefined) ? 1 : minNodeConnect,
-      _maxNodeConnect = (maxNodeConnect == undefined) ? 3 : maxNodeConnect;
+  const [isMounted, setIsMounted] = useState(false);
+  const [dimensions, setDimensions] = useState({ height: 0, width: 0 });
+  var _graphMin = graphMin == undefined ? 150 : graphMin,
+    _graphMax = graphMax == undefined ? 300 : graphMax,
+    _minTree = minTree == undefined ? 10 : minTree,
+    _maxTree = maxTree == undefined ? 20 : maxTree,
+    _minNodeConnect = minNodeConnect == undefined ? 1 : minNodeConnect,
+    _maxNodeConnect = maxNodeConnect == undefined ? 3 : maxNodeConnect,
+    marginSize = 2;
 
+  useEffect(() => {
+    setIsMounted(true);
+    var body = document.body,
+      html = document.documentElement;
+
+    var lheight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight
+    );
+    var lwidth = Math.max(
+      body.scrollWidth,
+      body.offsetWidth,
+      html.clientWidth,
+      html.scrollWidth,
+      html.offsetWidth
+    );
+    setDimensions({ height: lheight, width: lwidth });
+  }, []);
   const forceCount = useRef(0);
-  let displayHeight = window.innerHeight;
-  let displayWidth = window.innerWidth;
-  let marginSize = 2;
+  const fgRef = useRef();
 
   let nodes = [];
+  let edges = [];
+  let edgeCount = 0;
+  let treeCount = 0;
+
   for (let i = 0; i <= getRndInteger(_graphMin, _graphMax); i++) {
     nodes.push({
       id: `${i}`,
       color: "rgb(140,140,140)",
       degree: 0,
-      val: 1
+      val: 1,
     });
   }
-  let explored = {};
+  let explored = [];
   for (let i = 0; i < nodes.length; i++) {
     explored[nodes[i].id] = false;
   }
-
-  let edges = [];
-  let edgeCount = 0;
-  let treeCount = 0;
 
   function BFS(nodes, start, max) {
     explored[start.id] = true;
@@ -82,12 +109,12 @@ export default function GraphComponent({
     let connected = 0;
 
     let randomMarginWidth = getRndInteger(
-      -(displayWidth / marginSize),
-      displayWidth / marginSize
+      -(dimensions.width / marginSize),
+      dimensions.width / marginSize
     );
     let randomMarginHeight = getRndInteger(
-      -(displayHeight / marginSize),
-      displayHeight / marginSize
+      -(dimensions.height / marginSize),
+      dimensions.height / marginSize
     );
     treeCount++;
 
@@ -109,7 +136,7 @@ export default function GraphComponent({
           start.y = randomMarginHeight;
 
           queue.enqueue(node);
-          explored[node.id] = true; 
+          explored[node.id] = true;
           edges.push({
             id: "edge" + edgeCount,
             source: s.id,
@@ -137,17 +164,6 @@ export default function GraphComponent({
     srcNode.val = Math.log2(srcNode.degree);
     tgNode.val = Math.log2(tgNode.degree);
   });
-
-  /*let sunData = {
-    id: `sun`,
-    color: "yellow",
-    val: 50,
-    x: 300,
-    y: -200
-  };
-  sunData.fx = sunData.x;
-  sunData.fy = sunData.y;
-  nodes.push(sunData);*/
 
   let data = {
     nodes: nodes,
@@ -178,29 +194,23 @@ export default function GraphComponent({
     }, aliveTime);
   };
 
-  let widthBorder = displayWidth / marginSize;
-  let heightBorder = displayHeight / marginSize;
+  let widthBorder = dimensions.width / marginSize;
+  let heightBorder = dimensions.height / marginSize;
 
-  const fgRef = useRef();
+  if (!isMounted) {
+    return <NoGraph />;
+  }
   return (
-    <div
-      className={
-        "w-[" +
-        displayWidth +
-        "] h-[" +
-        displayHeight +
-        "] border-white border-10 absolute top-0 z-0"
-      }
-    >
+    <div className={"relative top-0 z-0"}>
       <ForceGraph2D
         ref={fgRef}
-        width={displayWidth}
-        height={displayHeight}
+        width={dimensions.width}
+        height={dimensions.height}
         enableZoomInteraction={false}
         enablePanInteraction={false}
-        graphData={data}  
+        graphData={data}
         cooldownTime={6000}
-        linkDirectionalParticleColor={() => 'white'}
+        linkDirectionalParticleColor={() => "white"}
         linkDirectionalParticleSpeed={0.013}
         linkDirectionalParticles={1}
         onEngineTick={() => {
@@ -231,7 +241,6 @@ export default function GraphComponent({
           sim("centerx", d3.forceX(0).strength(0.015));
           sim("centery", d3.forceY(0).strength(0.015));
         }}
-        
         onNodeDragEnd={(node, translate) => {
           if (
             !FindPoint(
