@@ -201,7 +201,7 @@ export default function GraphComponent({
     return <NoGraph />;
   }
   return (
-    <div className={"relative top-0 z-0"}>
+    <div className={"absolute top-0 z-0"}>
       <ForceGraph2D
         ref={fgRef}
         width={dimensions.width}

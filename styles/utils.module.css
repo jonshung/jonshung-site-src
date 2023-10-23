@@ -1,10 +1,10 @@
   .containerHolder {
-    @apply relative flex min-w-full min-h-full justify-center;
+    @apply relative flex py-36 justify-around;
     pointer-events: auto;
   }
 
   .container {
-    @apply top-[15vh] absolute flex flex-col z-20 justify-center items-center min-w-[75%] md:min-w-[50%] lg:min-w-[23%] max-w-[45%];
+    @apply relative flex flex-col z-20 justify-center items-center min-w-[75%] md:min-w-[50%] lg:min-w-[23%] max-w-[45%];
     pointer-events: none;
   }
   

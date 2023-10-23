@@ -51,6 +51,11 @@ export default function homePage() {
           href="https://facebook.com/jonshung.g"
           buttonId="facebook"
         />
+        <LinkButton
+          label="Blogs"
+          href="/blog"
+          buttonId="blog"
+        />
       </div>
     </BackdropBlurContainer>
   );
@@ -61,11 +66,13 @@ function LinkButton({ label, href, buttonId }) {
     facebook: "hover:bg-[#5890ff] hover:text-blue-900 hover:shadow-blue-400",
     github: "hover:bg-[#39d98a] hover:text-green-950 hover:shadow-green-400",
     linkedin: "hover:bg-[#0077B5] hover:text-gray-900 hover:shadow-[#0077B5]",
+    blog: "hover:bg-[#F37748] hover:text-white hover:shadow-[#D56062]"
   };
   const iconVariant = {
     facebook: "facebook-icon.webp",
     github: "github-icon.png",
     linkedin: "linkedin-icon.png",
+    blog: "blog-icon.png"
   };
   return (
     <Link

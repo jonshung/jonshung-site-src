@@ -6,8 +6,8 @@ import html from "remark-html";
 
 const docPath = path.join(process.cwd(), "doc");
 
-export async function getPostData(blog) {
-  const fullPath = path.join(docPath, `${blog}.md`);
+export async function getPostData(id) {
+  const fullPath = path.join(docPath, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const matterResult = matter(fileContents);
 
@@ -17,7 +17,7 @@ export async function getPostData(blog) {
   const contentHtml = processedContent.toString();
 
   return {
-    blog,
+    id,
     ...matterResult.data,
     contentHtml,
   };

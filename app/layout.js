@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
         <div className={utilStyles.containerHolder + "  " + bgImg.bgImg}>
           <div className={utilStyles.container}>{children}</div>
           <DynamicGraph
-            className="z-0"
             minNodeConnect={1}
             maxNodeConnect={3}
           ></DynamicGraph>
@@ -36,15 +35,15 @@ export default function RootLayout({ children }) {
   );
 }
 
-function LinkButton() {
+export function LinkButton() {
   const colorVariant = {
-    back: "hover:bg-[#5890ff] hover:text-blue-900 hover:shadow-blue-400",
+    back: "hover:bg-[#000000] hover:shadow-black",
   };
   return (
     <Link
       className={
         `w-52 h-16 flex group overflow-clip
-            transition rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white/[.9] items-center justify-center 
+            transition duration-300 rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white/[.9] items-center justify-center 
             border-[0.2px] border-transparent text-lg font-thin focus:outline-none focus-visible:ring-2 
           focus-visible:ring-blue-500 focus-visible:ring-offset-2 max-w-[200px] hover:scale-110 ` +
         colorVariant.back
@@ -53,7 +52,7 @@ function LinkButton() {
     >
       <div
         className={
-          "transition duration-300 text-black group-hover:text-md group-hover:font-semibold"
+          "transition duration-300 text-black group-hover:text-white group-hover:text-md group-hover:font-semibold"
         }
       >
         Home
@@ -72,23 +71,6 @@ export function BackdropBlurContainer({ children, home, padding }) {
       {children}
       {!home ? (
         <div className="mt-10 relative">
-          <LinkButton />
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-export function SolidWhiteContainer({ children, home, padding }) {
-  padding = padding == undefined ? "p-0" : padding;
-  return (
-    <div
-      className={`relative flex flex-col pointer-events-auto ${padding} w-full h-full max-h-[450px] max-w-[350px] pb-16 items-center justify-start bg-white shadow-white/[.1] 
-                   shadow-xl drop-shadow-lg`}
-    >
-      {children}
-      {!home ? (
-        <div className="mt-16 relative px-4">
           <LinkButton />
         </div>
       ) : null}
