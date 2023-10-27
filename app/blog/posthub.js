@@ -23,6 +23,7 @@ export default function PostHub({ allPostsDatas }) {
     <div className="flex flex-col items-start justify-center">
       <motion.div className="relative -top-20 basis-full lg:-top-16 text-white bottom-5 [--title-move-to:] lg:[--title-move-to:50%]"
                   animate={ { x: "var(--title-move-to)"} }
+                  transition={{ ease:'anticipate', duration: 2.5}}
       >
         <h1 className="text-8xl lg:text-7xl font-bold">What's on my mind?</h1>
       </motion.div>

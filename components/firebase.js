@@ -15,8 +15,8 @@ const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 const pathRef = ref(storage, "");
 
-export function getPost(id) {
-  return downloadFile(ref(storage, "/" + id + ".md"));
+export async function getPost(id) {
+  return await downloadFile(ref(storage, "/" + id + ".md"));
 }
 
 export async function getAllPosts() {
@@ -40,6 +40,6 @@ async function downloadFile(referenceObj) {
     });
   });
   const content = await postRaw.text();
-  const id = referenceObj.name;
+  const id = referenceObj.name.replace(/\.md$/, '');
   return {id: id, raw: content};
 }

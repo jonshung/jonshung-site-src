@@ -1,14 +1,9 @@
 import Image from "next/image";
 import { BackdropBlurContainer } from "../../layout";
-import { getPostData, getPostsPaths } from "./lib/blogPosts";
+import { getPostData } from "./lib/blogPosts";
 
-export async function generateStaticParams() {
-  const paths = getPostsPaths();
-  return paths;
-}
-
-export default async function blogPage(props) {
-  //const blogData = params.;
+export default async function blogPage({ params }) {
+  const blogData = await getPostData(params.id);
   return (
     <BackdropBlurContainer>
       <div className="relative flex h-24 w-full justify-center rounded-xl bg-cover">
