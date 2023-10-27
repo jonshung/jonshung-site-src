@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className="overflow-x-hidden noscroll">
         <div className={utilStyles.containerHolder + "  " + bgImg.bgImg}>
           <div className={utilStyles.container}>{children}</div>
           <DynamicGraph

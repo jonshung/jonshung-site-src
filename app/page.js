@@ -84,6 +84,7 @@ function LinkButton({ label, href, buttonId }) {
         colorVariant[buttonId]
       }
       href={href}
+      prefetch={true}
     >
       <Image
         src={"/media/images/" + iconVariant[buttonId]}

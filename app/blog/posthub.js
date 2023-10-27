@@ -1,28 +1,45 @@
-'use client'
-import dynamic from "next/dynamic";
+"use client";
+
 import { useEffect, useState } from "react";
 import PostCard from "./components/postcard";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 function Loading({}) {
-    return <h1>Loading...</h1>;
+  return <h1>Loading...</h1>;
 }
 
 export default function PostHub({ allPostsDatas }) {
-    const [ selected, setSelected ] = useState("");
-    const [ isMounted, setIsMounted ] = useState(false);
-    useEffect(() => {
-        setIsMounted(true);
-    }, [])
-    if(!isMounted) {
-        return <Loading />
-    }
-    return (
-        <ul className="left-10 w-full h-full flex-auto top-20 relative flex flex-row justify-evenly space-x-[13vw]">
+  const [selected, setSelected] = useState(-1);
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return <Loading />;
+  }
+  var k = 0;
+  return (
+    <div className="flex flex-col items-start justify-center">
+      <motion.div className="relative -top-20 basis-full lg:-top-16 text-white bottom-5 [--title-move-to:] lg:[--title-move-to:50%]"
+                  animate={ { x: "var(--title-move-to)"} }
+      >
+        <h1 className="text-8xl lg:text-7xl font-bold">What's on my mind?</h1>
+      </motion.div>
+      <AnimatePresence mode="wait">
+        <ul className="left-[5%] lg:left-10 w-full h-full flex-auto relative flex flex-col lg:flex-row justify-evenly space-y-[13vh] lg:space-x-[10vw] xl:space-x-[13vw] 
+                        lg:space-y-0">
           {allPostsDatas.map((postData) => (
-            <li key={postData.id}>
-              <PostCard postData={postData} selected={selected} setSelected={setSelected}></PostCard>
+            <li key={postData.id} className={`relative`}>
+              <PostCard
+                postData={postData}
+                selected={selected}
+                setSelected={setSelected}
+              ></PostCard>
             </li>
           ))}
         </ul>
-      );
+      </AnimatePresence>
+    </div>
+  );
 }

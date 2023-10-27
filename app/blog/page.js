@@ -1,14 +1,8 @@
 import PostHub from "./posthub";
-import { getPostsPaths, getPostData } from "./[id]/lib/blogPosts";
+import { getAllPostsData } from "./[id]/lib/blogPosts";
 
 export default async function blogHub() {
-  const allPostsPaths = getPostsPaths();
-  const allPostsDatas = await Promise.all(
-    allPostsPaths.map(async (postId) => {
-      return await getPostData(postId.id);
-    })
-  );
-
+  const allPostsDatas = await getAllPostsData();
   return (
     <PostHub allPostsDatas={allPostsDatas} />
   )

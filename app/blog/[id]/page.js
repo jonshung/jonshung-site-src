@@ -7,12 +7,12 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default async function blogPage({ params }) {
-  const blogData = await getPostData(params.id);
+export default async function blogPage(props) {
+  //const blogData = params.;
   return (
     <BackdropBlurContainer>
       <div className="relative flex h-24 w-full justify-center rounded-xl bg-cover">
-        <div className="absolute flex h-[120px] w-[120px] items-center justify-center rounded-full border-[10px] border-white/0 backdrop-blur-md bg-white/0 overflow-hidden">
+        <div className="absolute flex h-[120px] w-[120px] items-center justify-center rounded-full border-[10px] border-white/[.1] backdrop-blur-md bg-white/0 overflow-hidden">
           <Image
             className="relative h-full w-full object-cover"
             src="/media/images/profile_picture.jpg"
@@ -38,7 +38,7 @@ export default async function blogPage({ params }) {
         <div className="relative flex justify-center p-5 bg-white indent-7 m-auto rounded-xl max-w-[85%]">
           <div
             className="text-justify font-normal indent-7"
-            dangerouslySetInnerHTML={{ __html: blogData.contentHtml }}
+            dangerouslySetInnerHTML={{ __html: blogData.content }}
           />
         </div>
       </div>
