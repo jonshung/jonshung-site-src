@@ -1,4 +1,4 @@
-import { getAllPosts, getPost } from "../../../../components/firebase";
+import { getAllPosts, getPost } from "../../../cleanup/firebase";
 import matter from "gray-matter";
 
 export async function getPostData(id) {
