@@ -20,17 +20,22 @@ export default function PostHub({ allPostsDatas }) {
   }
   var k = 0;
   return (
-    <div className="flex flex-col items-start justify-center">
-      <motion.div className="relative -top-20 basis-full lg:-top-16 text-white bottom-5 [--title-move-to:] lg:[--title-move-to:50%]"
-                  animate={ { x: "var(--title-move-to)"} }
-                  transition={{ ease:'anticipate', duration: 2.5}}
+    <div className="flex flex-col m-auto pb-10">
+      <motion.div
+        className="relative mb-16 basis-full lg:-top-16 text-white bottom-5 [--title-move-to:] lg:[--title-move-to:20%]"
+        animate={{ x: "var(--title-move-to)" }}
+        transition={{ ease: "anticipate", duration: 2.5 }}
       >
         <h1 className="text-8xl lg:text-7xl font-bold">What's on my mind?</h1>
       </motion.div>
+
       <AnimatePresence mode="wait">
-        <ul className="left-[5%] lg:left-10 w-full h-full flex-auto relative flex flex-col lg:flex-row justify-evenly space-y-[13vh] lg:space-x-[10vw] xl:space-x-[13vw] 
-                        lg:space-y-0">
-          {allPostsDatas.map((postData) => (
+        <ul
+          className="left-[5%] lg:left-10 w-full h-full flex-auto relative flex flex-col lg:flex-row justify-evenly space-y-[13vh] lg:space-x-[10vw] xl:space-x-[13vw] 
+                        lg:space-y-0"
+        >
+          {
+          allPostsDatas.map((postData) => (
             <li key={postData.id} className={`relative`}>
               <PostCard
                 postData={postData}
@@ -38,7 +43,8 @@ export default function PostHub({ allPostsDatas }) {
                 setSelected={setSelected}
               ></PostCard>
             </li>
-          ))}
+          ))
+          }
         </ul>
       </AnimatePresence>
     </div>

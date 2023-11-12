@@ -89,7 +89,7 @@ export default function GraphComponent({
   for (let i = 0; i <= getRndInteger(_graphMin, _graphMax); i++) {
     nodes.push({
       id: `${i}`,
-      color: "rgb(140,140,140)",
+      color: "rgb(70,70,70)",
       degree: 0,
       val: 1,
     });
@@ -141,7 +141,7 @@ export default function GraphComponent({
             id: "edge" + edgeCount,
             source: s.id,
             target: node.id,
-            color: "rgb(140,140,140)",
+            color: "rgb(70,70,70)",
           });
           edgeCount++;
           connected++;
@@ -201,7 +201,7 @@ export default function GraphComponent({
     return <NoGraph />;
   }
   return (
-    <div className={"absolute top-0 z-0"}>
+    <div className={"absolute top-0 left-0 right-0 bottom-0 z-0"}>
       <ForceGraph2D
         ref={fgRef}
         width={dimensions.width}
@@ -210,11 +210,13 @@ export default function GraphComponent({
         enablePanInteraction={false}
         graphData={data}
         cooldownTime={6000}
-        linkDirectionalParticleColor={() => "white"}
+        linkDirectionalParticleColor={() => "rgb(80,80,80)"}
         linkDirectionalParticleSpeed={0.013}
         linkDirectionalParticles={1}
         onEngineTick={() => {
           let graph = fgRef.current;
+          console.log(graph);
+          if(graph == null) return;
           graph.zoom(1);
           let sim = graph.d3Force;
 

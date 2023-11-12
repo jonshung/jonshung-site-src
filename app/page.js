@@ -1,109 +1,21 @@
-import Link from "next/link";
-import Image from "next/image";
-import { BackdropBlurContainer } from "./layout";
+"use client";
+import { useTypewriter } from "./hook/typing";
 
 export default function homePage() {
-  const items = [
-    "Documentations",
-    "LinkedIn",
-    "Github",
-    "Facebook",
-    "Instagram",
-  ];
+  const placeholder = "Hello there, \n<Jons> here.";
+  const helloText = useTypewriter(placeholder, 100);
   return (
-    <BackdropBlurContainer padding={"p-4"} home>
-      <div className="relative flex h-40 w-full justify-center rounded-xl bg-cover">
-        <Image
-          className="absolute flex justify-center rounded-xl object-cover"
-          src="/media/images/school-bg.jpg"
-          sizes="100vw"
-          fill
-          alt="HCMUS"
-          priority={true}
-        />
-        <div className="absolute -bottom-12 flex h-[100px] w-[100px] items-center justify-center rounded-full border-[10px] border-white/0 backdrop-blur-md bg-white/0 overflow-hidden">
-          <Image
-            className="h-full w-full object-cover"
-            src="/media/images/profile_picture.jpg"
-            sizes="100vw"
-            fill
-            alt="Jons Hung"
-            priority={true}
-          />
+    <div className="w-full h-full flex flex-row">
+      <div className="relative w-[var(--intro-width)] h-full bg-[#739072]">
+        <h1 className="relative left-20 top-52 text-[110px] text-[#2f3f2f] whitespace-pre-wrap">
+          {helloText}
+        </h1>
+      </div>
+      <div className="relative flex w-[calc(100vh-var(--intro-width))] h-full border-t-[2px] border-[#3A4D39]">
+        <div className="grow">
+          <div className="w-screen h-full bg-[#ECE3CE]"></div>
         </div>
       </div>
-      <div className="mt-14 flex flex-col items-center">
-        <h4 className="text-xl font-bold text-white">Jons Hung</h4>
-      </div>
-      <div className="grid gap-10 justify-center mt-4">
-        <LinkButton
-          label="Github"
-          href="https://github.com/jonshung"
-          buttonId="github"
-        />
-        <LinkButton
-          label="LinkedIn"
-          href="https://www.linkedin.com/in/jonshung/"
-          buttonId="linkedin"
-        />
-        <LinkButton
-          label="Facebook"
-          href="https://facebook.com/jonshung.g"
-          buttonId="facebook"
-        />
-        <LinkButton
-          label="Blogs"
-          href="/blog"
-          buttonId="blog"
-        />
-      </div>
-    </BackdropBlurContainer>
-  );
-}
-
-function LinkButton({ label, href, buttonId }) {
-  const colorVariant = {
-    facebook: "hover:bg-[#5890ff] hover:text-blue-900 hover:shadow-blue-400",
-    github: "hover:bg-[#39d98a] hover:text-green-950 hover:shadow-green-400",
-    linkedin: "hover:bg-[#0077B5] hover:text-gray-900 hover:shadow-[#0077B5]",
-    blog: "hover:bg-[#F37748] hover:text-white hover:shadow-[#D56062]"
-  };
-  const iconVariant = {
-    facebook: "facebook-icon.webp",
-    github: "github-icon.png",
-    linkedin: "linkedin-icon.png",
-    blog: "blog-icon.png"
-  };
-  return (
-    <Link
-      className={
-        `w-52 h-16 flex group overflow-clip
-            transition rounded-2xl backdrop-blur-xl bg-white shadow-lg shadow-white/[.9] items-center justify-center 
-            border-[0.2px] border-transparent text-lg font-bold focus:outline-none focus-visible:ring-2 
-          focus-visible:ring-blue-500 focus-visible:ring-offset-2 max-w-[200px] hover:scale-110 ` +
-        colorVariant[buttonId]
-      }
-      href={href}
-      prefetch={true}
-    >
-      <Image
-        src={"/media/images/" + iconVariant[buttonId]}
-        className={
-          "transition duration-300 -translate-x-44 absolute group-hover:translate-x-0 object-contain"
-        }
-        sizes="100vw"
-        width={35}
-        height={35}
-        alt="link icon"
-        priority={true}
-      />
-      <div
-        className={
-          "transition duration-300 text-black group-hover:translate-x-44"
-        }
-      >
-        {label}
-      </div>
-    </Link>
+    </div>
   );
 }

@@ -1,10 +1,11 @@
 import Link from "next/link";
-import bgImg from "../components/background.module.css";
-import utilStyles from "../styles/utils.module.css";
-import dynamic from "next/dynamic";
 
 import { Inter } from "next/font/google";
 import "../styles/global.css";
+import utilStyles from "../styles/utils.module.css";
+
+import NavBar from "./component/navbar";
+import { SideBar } from "./component/sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,23 +14,16 @@ const inter = Inter({
 export const siteTitle = "Jons Hung";
 
 export const metadata = {
-  title: "Home",
+  title: "Jons Hung",
   description: "Jons Hung Portfolio",
 };
 
 export default function RootLayout({ children }) {
-  const DynamicGraph = dynamic(() => import('../components/graph'), { ssr: false });
-
   return (
     <html lang="en">
-      <body className="overflow-x-hidden noscroll">
-        <div className={utilStyles.containerHolder + "  " + bgImg.bgImg}>
-          <div className={utilStyles.container}>{children}</div>
-          <DynamicGraph
-            minNodeConnect={1}
-            maxNodeConnect={3}
-          ></DynamicGraph>
-        </div>
+      <body className="overflow-x-hidden flex min-w-screen min-h-screen bg-black">
+        <SideBar className="row-span-full" />
+        <div className={utilStyles.containerHolder}>{children}</div>
       </body>
     </html>
   );
@@ -58,22 +52,5 @@ export function LinkButton() {
         Home
       </div>
     </Link>
-  );
-}
-
-export function BackdropBlurContainer({ children, home, padding }) {
-  padding = padding == undefined ? "p-0" : padding;
-  return (
-    <div
-      className={`relative w-full h-full pointer-events-auto ${padding} pb-16  flex flex-col items-center justify-start bg-white/[.1] shadow-white/[.1] 
-                    shadow-xl bg-clip-border border-[5px] border-transparent rounded-xl backdrop-blur-[4px] drop-shadow-lg`}
-    >
-      {children}
-      {!home ? (
-        <div className="mt-10 relative">
-          <LinkButton />
-        </div>
-      ) : null}
-    </div>
   );
 }
