@@ -1,5 +1,5 @@
 .containerHolder {
-  --intro-width: 45vw;
+  --intro-width: 50vw;
   @apply flex min-h-screen min-w-full;
 }
 

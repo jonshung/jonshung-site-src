@@ -7,7 +7,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-export function useTypewriter(input, keystrokeDuration) {
+export function useTypewriter(input, keystrokeDuration, delay, doneRef, start = false) {
   const [info, setInfo] = useState(0);
   var isOnTimeout = useRef(false);
 
@@ -19,9 +19,9 @@ export function useTypewriter(input, keystrokeDuration) {
     });
   };
 
-  if (!isOnTimeout.current) {
+  if (!isOnTimeout.current && start) {
     if (info == 0) {
-      setTimeout(callback, keystrokeDuration + 1000);
+      setTimeout(callback, keystrokeDuration + delay);
     } else if (info <= input.length) {
       const time = keystrokeDuration + getRandomInt(-1, 2) * 50;
       setTimeout(callback, time);
@@ -30,11 +30,8 @@ export function useTypewriter(input, keystrokeDuration) {
   }
 
   const endAppend =
-    info < input.length ? (
-      <span className="font-light">|</span>
-    ) : (
-      <span></span>
-    );
+    (info < input.length && start) ? <span className="font-light">|</span> : <span></span>;
+  if (info == input.length && doneRef) doneRef.current = true;
   return (
     <>
       <span className="font-bold">{input.substring(0, info)}</span>

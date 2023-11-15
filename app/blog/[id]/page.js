@@ -1,42 +1,31 @@
-import Image from "next/image";
-import { BackdropBlurContainer } from "../../layout";
-import { getPostData } from "./lib/blogPosts";
+import { getPostData } from "./lib/blogData.js";
+import Image
+ from "next/image";
+export default function blogPage({ params }) {
+  const postData = getPostData(params.id);
 
-export default async function blogPage({ params }) {
-  const blogData = await getPostData(params.id);
   return (
-    <BackdropBlurContainer>
-      <div className="relative flex h-24 w-full justify-center rounded-xl bg-cover">
-        <div className="absolute flex h-[120px] w-[120px] items-center justify-center rounded-full border-[10px] border-white/[.1] backdrop-blur-md bg-white/0 overflow-hidden">
+    <div className="relative flex w-full h-full flex-col justify-center items-center pt-10 pb-10">
+      <div className="absolute w-[50%] h-32 overflow-hidden m-0 rounded-md">
+        {postData.cover ? (
           <Image
-            className="relative h-full w-full object-cover"
-            src="/media/images/profile_picture.jpg"
-            sizes="100vw"
+            className={"object-cover"}
+            src={postData.cover}
             fill
-            alt="Jons Hung"
-            priority={true}
+            alt=""
           />
-        </div>
+        ) : (
+          <></>
+        )}
       </div>
-      <div className="mt-7 flex flex-col items-center">
-        <h4 className="text-xl font-bold text-white">Jons Hung</h4>
-      </div>
-      <h2 className="mt-2 flex flex-col mb-1 items-center text-2xl font-bold text-white">
-        <span>Blog</span>
-      </h2>
-      <div className="w-full relative justify-center items-center">
-        <div className="text-center text-xl text-white"> {blogData.title} </div>
-        <div className="text-center text-lg mb-4 text-white font-thin italic">
-          {" "}
-          {blogData.date}{" "}
-        </div>
-        <div className="relative flex justify-center p-5 bg-white indent-7 m-auto rounded-xl max-w-[85%]">
-          <div
-            className="text-justify font-normal indent-7"
-            dangerouslySetInnerHTML={{ __html: blogData.content }}
-          />
-        </div>
-      </div>
-    </BackdropBlurContainer>
+      <h1 className="text-6xl text-[#ECE3CE]">
+        {postData.title ? postData.title : ""}
+      </h1>
+      {postData.date ? <h2>{postData.date}</h2> : <></>}
+      <div
+        className="w-[90%] grow text-md text-[#ECE3CE]"
+        dangerouslySetInnerHTML={{ __html: postData.content }}
+      />
+    </div>
   );
 }

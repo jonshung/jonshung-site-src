@@ -3,6 +3,10 @@
 @tailwind utilities;
 @tailwind variants;
 
+body {
+  background-color: #739072;
+}
+
 #canvas {
   flex: 1 1 0;
   min-width: 0;

@@ -7,27 +7,32 @@ import { motion } from "framer-motion";
 function BackgroundFilter({ isOpen }) {
   const style = {
     open: {
+      visibility: "visible",
       opacity: 1,
       transition: {
+        visibility: {
+          duration: 0,
+        },
         duration: 0.3,
-        type: "easeInOut",
+        ease: "easeInOut",
       },
     },
     close: {
+      visibility: "hidden",
       opacity: 0,
       transition: {
+        visibility: {
+          duration: 0,
+        },
         duration: 1,
         delay: 0.2,
-        type: "spring",
-        stiffness: 400,
-        damping: 40,
       },
     },
   };
   return (
     <motion.div
       variants={style}
-      initial={{ opacity: 0 }}
+      initial={{ opacity: 0, visibility: 'hidden' }}
       className={`fixed w-full z-[1] h-full bg-black/[.4] backdrop-blur-sm`}
     />
   );
@@ -39,7 +44,7 @@ export function SideBar() {
     <motion.div
       initial={false}
       animate={isOpen ? "open" : "close"}
-      className="relative flex z-[4]"
+      className="relative z-[4] collapse hidden lg:visible lg:flex"
     >
       <BackgroundFilter isOpen={isOpen} />
       <ReferenceList isOpen={isOpen} />
@@ -72,7 +77,7 @@ function ReferenceList({ isOpen }) {
     open: {
       opacity: 1,
       transition: {
-        type: "easeInOut",
+        ease: "easeInOut",
       },
     },
     close: {
@@ -80,7 +85,7 @@ function ReferenceList({ isOpen }) {
       transition: {
         opacity: {
           duration: 0.2,
-          type: "easeInOut",
+          ease: "easeInOut",
         },
       },
     },

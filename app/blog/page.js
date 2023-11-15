@@ -1,8 +1,8 @@
-import PostHub from "./posthub";
-import { getAllPostsData } from "./[id]/lib/blogPosts";
+import PostHub from "./components/posthub";
+import { getAllPostsData } from "./[id]/lib/blogData";
 
-export default async function blogHub() {
-  const allPostsDatas = await getAllPostsData();
+export default async function BlogHub() {
+  const allPostsDatas = getAllPostsData();
   return (
     <PostHub allPostsDatas={allPostsDatas} />
   )

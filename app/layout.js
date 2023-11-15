@@ -1,10 +1,9 @@
 import Link from "next/link";
 
 import { Inter } from "next/font/google";
-import "../styles/global.css";
+import "./global.css";
 import utilStyles from "../styles/utils.module.css";
 
-import NavBar from "./component/navbar";
 import { SideBar } from "./component/sidebar";
 
 const inter = Inter({
@@ -21,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="overflow-x-hidden flex min-w-screen min-h-screen bg-black">
+      <body className="overflow-x-hidden flex min-w-screen min-h-screen">
         <SideBar className="row-span-full" />
         <div className={utilStyles.containerHolder}>{children}</div>
       </body>

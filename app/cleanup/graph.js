@@ -215,7 +215,6 @@ export default function GraphComponent({
         linkDirectionalParticles={1}
         onEngineTick={() => {
           let graph = fgRef.current;
-          console.log(graph);
           if(graph == null) return;
           graph.zoom(1);
           let sim = graph.d3Force;
